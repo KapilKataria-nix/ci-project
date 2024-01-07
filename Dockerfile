@@ -18,7 +18,8 @@ FROM golang:1.19
 WORKDIR /app
 
 # Download Go modules
-RUN go mod download
+RUN go mod tidy && go mod vendor
+
 
 COPY *.go ./
 
