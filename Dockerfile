@@ -13,18 +13,12 @@
 # limitations under the License.
 
 FROM golang:1.19
-
-# Set destination for COPY
+RUN go get -d github.com/codegangsta/negroni \
+           github.com/gorilla/mux \
+           github.com/xyproto/simpleredis
 WORKDIR /app
-
-# Download Go modules
-RUN go mod tidy && go mod vendor
-
-
-COPY *.go ./
-
-# Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
+ADD ./main.go .
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
 FROM scratch
 WORKDIR /app
