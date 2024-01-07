@@ -12,19 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.19
+# Stage 1: Build the Go application
+FROM golang:1.10.0 as builder
+
 RUN go get github.com/codegangsta/negroni \
            github.com/gorilla/mux \
            github.com/xyproto/simpleredis
+
 WORKDIR /app
 ADD ./main.go .
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
+# Stage 2: Create a minimal image with the built binary
 FROM scratch
+
 WORKDIR /app
-COPY --from=0 /app/main .
+COPY --from=builder /app/main .
 COPY ./public/index.html public/index.html
 COPY ./public/script.js public/script.js
 COPY ./public/style.css public/style.css
+
 CMD ["/app/main"]
 EXPOSE 3000
+
