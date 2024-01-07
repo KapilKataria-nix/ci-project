@@ -15,9 +15,10 @@
 FROM golang:latest
 
 RUN go mod init nixnonymous-ci
-RUN go get github.com/codegangsta/negroni \
-           github.com/gorilla/mux \
-           github.com/xyproto/simpleredis
+RUN go get github.com/codegangsta/negroni
+RUN go get github.com/gorilla/mux
+RUN go get github.com/xyproto/simpleredis
+
 WORKDIR /app
 ADD ./main.go .
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
