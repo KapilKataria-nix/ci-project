@@ -13,7 +13,7 @@
 # limitations under the License.
 
 FROM golang:1.19
-RUN go get -d github.com/codegangsta/negroni \
+RUN go get github.com/codegangsta/negroni \
            github.com/gorilla/mux \
            github.com/xyproto/simpleredis
 WORKDIR /app
