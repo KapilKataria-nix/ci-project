@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:latest
+FROM golang:1.19
 
-RUN go mod init nixnonymous-ci
-RUN go get github.com/codegangsta/negroni
-RUN go get github.com/gorilla/mux
-RUN go get github.com/xyproto/simpleredis
-
+# Set destination for COPY
 WORKDIR /app
-ADD ./main.go .
-RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+
+# Download Go modules
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY *.go ./
+
+# Build
+RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
 
 FROM scratch
 WORKDIR /app
