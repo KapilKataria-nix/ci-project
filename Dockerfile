@@ -15,6 +15,7 @@
 # Stage 1: Build the Go application
 FROM golang:1.10.0 as builder
 
+RUN go mod init nixnonymous-ci
 RUN go get github.com/codegangsta/negroni \
            github.com/gorilla/mux \
            github.com/xyproto/simpleredis
