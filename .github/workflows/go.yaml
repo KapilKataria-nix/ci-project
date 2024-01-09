@@ -24,8 +24,8 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build Container (Check)
-      run: if [[ $(git log --format=%B -n 1 ${{ github.sha }}) == *'Build container'* ]]; then echo "Building container..."
+    - name: Checking if Commit message contains "BUILD_CONTAINER_IMAGE"
+      run: if [[ $(git log --format=%B -n 1 ${{ github.sha }}) == *'BUILD_CONTAINER_IMAGE'* ]]; then echo "Building container..."
           else
           echo "Skipping container build as commit message does not contain 'Build container'."
           fi
