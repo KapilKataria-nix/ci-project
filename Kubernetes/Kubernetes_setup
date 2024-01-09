@@ -1,0 +1,92 @@
+1. Setting Kubernetes Locally
+ 
+    -> Installation Procedure for Kubectl (Command-Line tool for Kubernetes)
+ 
+    -> Go to https://kubernetes.io/docs/tasks/tools/
+ 
+    -> Selecting the OS type follow the installation step
+ 
+    -> For Windows follow steps below:
+ 
+        a. Use command on powershell : 
+ 
+            > curl.exe -LO "https://dl.k8s.io/release/v1.29.0/bin/windows/amd64/kubectl.exe"
+ 
+        b. Validate the Binary using Checksum file: 
+ 
+            > curl.exe -LO "https://dl.k8s.io/v1.29.0/bin/windows/amd64/kubectl.exe.sha256"
+            
+            > CertUtil -hashfile kubectl.exe SHA256 
+            
+            > type kubectl.exe.sha256
+            
+            > $(Get-FileHash -Algorithm SHA256 .\kubectl.exe).Hash -eq $(Get-Content .\kubectl.exe.sha256)
+        
+        c. Confirm Kubectl installation:
+            
+            > kubectl version --client
+        
+        Note: If error occurs regarding $Unrecognized Command, simply add file path to environment Variable
+
+    ----------------------------------------------------------------------------------------------------------------------
+    
+    -> Installation Procedure for Minikube (simple Kubernetes implementation that Creates a VM on containing only on your local machine andd deploys a simple cluster containing only one node)
+        
+        a. Following insatllation steps below for Windows (x86-64) Architecture:
+        
+        b. Go to https://minikube.sigs.k8s.io/docs/start/
+        
+        c. Download requirements like Docker or VmWare (used) or VirtuaBox or any other VM Manager
+        
+        d. Select Architecture that describes your system (Used: Windows, x86-64: architecture, Stable release, 
+        installation type: .exe)
+        
+        e. Use command on Powershell (Run as Administrator):
+        
+            > New-Item -Path 'c:\' -Name 'minikube' -ItemType Directory -Force
+               Invoke-WebRequest -OutFile 'c:\minikube\minikube.exe' -Uri 'https://github.com/kubernetes/minikube/releases/latest/download/minikube-windows-amd64.exe' -UseBasicParsing
+        
+        f. Add minikube.exe binary to your Path (Environment Variable) and use:
+        
+            > $oldPath = [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariableTarget]::Machine)
+               if ($oldPath.Split(';') -inotcontains 'C:\minikube'){ [Environment]::SetEnvironmentVariable('Path', $('{0};C:\minikube' -f $oldPath), [EnvironmentVariableTarget]::Machine) }
+        
+        g. After Installation, start a cluster using the VMware Driver
+            > minikube start --driver vmware
+
+        h. Check if minikube is working or not:
+            > minikube status
+
+2. Deploying Dockerhub Image on Kubernetes
+    
+    -> Getting used to Kubectl run :
+        > kubectl get nodes (See nodes that are running)
+
+        > kubectl get po -A (See your Kubernetes cluster)
+
+        > kubectl get pods (See if there is any pod running)
+
+    -> Create a pod running on your docker image:
+        
+        > kubectl run <pod_name> --image=<DokcerHub repositry_name> --port=<Used in DockerImage>
+
+    -> Check if Pod is running: 
+        
+        > kubetctl get pods
+
+    -> Creating the Service of the pod (To access the pod) 
+        
+        > kubectl expose pod <Pod name> --name=<PodName>svc --port=<Used in DockerImage>
+
+    -> Creating Portforwading to access pod over Local Host
+
+        >kubectl port-forward service/<ServiceName created from Pod> <Open port>:<Port exposed in pod>
+
+    -> Finally Docker Image Deployed on Kubernetes!!!!!!!
+
+    ![Alt text](<Screenshot (57).png>)
+
+        
+            
+
+
