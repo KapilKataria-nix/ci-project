@@ -27,8 +27,6 @@
             > kubectl version --client
         
         Note: If error occurs regarding $Unrecognized Command, simply add file path to environment Variable
-
-    ----------------------------------------------------------------------------------------------------------------------
     
     -> Installation Procedure for Minikube (simple Kubernetes implementation that Creates a VM on containing only on your local machine andd deploys a simple cluster containing only one node)
         
