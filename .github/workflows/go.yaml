@@ -15,6 +15,7 @@ jobs:
             # Add steps for container building here
           else
             echo "Commit message does not contain 'Build container', skipping."
+            exit 1
           fi
   build:
     runs-on: ubuntu-latest
