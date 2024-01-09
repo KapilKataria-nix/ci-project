@@ -5,6 +5,17 @@ on:
     branches:
       - master
 jobs:
+  check-commit-message:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          if [[ $(git log -1 --pretty=%B) =~ "Build container" ]]; then
+            echo "Commit message contains 'Build container', triggering container build."
+            # Add steps for container building here
+          else
+            echo "Commit message does not contain 'Build container', skipping."
+          fi
   build:
     runs-on: ubuntu-latest
 
@@ -23,15 +34,6 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Checking if Commit message contains "BUILD_CONTAINER_IMAGE"
-      run: |
-          if [[ $(git log -1 --pretty=%B) =~ "Build container" ]]; then
-            echo "Commit message contains 'Build container', triggering container build."
-            # Add steps for container building here
-          else
-            echo "Commit message does not contain 'Build container', skipping."
-          fi
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
