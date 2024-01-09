@@ -25,9 +25,12 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Checking if Commit message contains "BUILD_CONTAINER_IMAGE"
-      run: if [[ $(git log --format=%B -n 1 ${{ github.sha }}) == *'BUILD_CONTAINER_IMAGE'* ]]; then echo "Building container..."
+      run: |
+          if [[ $(git log -1 --pretty=%B) =~ "Build container" ]]; then
+            echo "Commit message contains 'Build container', triggering container build."
+            # Add steps for container building here
           else
-          echo "Skipping container build as commit message does not contain 'Build container'."
+            echo "Commit message does not contain 'Build container', skipping."
           fi
 
     - name: Build and push Docker image
